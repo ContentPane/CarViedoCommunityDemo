@@ -147,6 +147,7 @@ public class VideoEditActivity extends Activity implements PLVideoSaveListener {
 
         mFrameListView = (FrameListView) findViewById(R.id.frame_list_view);
 
+
         initPreviewView();
         initTextSelectorPanel();
         initPaintSelectorPanel();
@@ -451,7 +452,6 @@ public class VideoEditActivity extends Activity implements PLVideoSaveListener {
         intent.putExtra(VideoDubActivity.MP4_PATH, mMp4path);
         startActivityForResult(intent, REQUEST_CODE_DUB);
     }
-
     public void onClickAudioMixSetting(View v) {
         if (mIsMixAudio) {
             mAudioMixSettingDialog.show();

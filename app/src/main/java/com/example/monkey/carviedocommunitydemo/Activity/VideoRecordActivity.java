@@ -64,7 +64,7 @@ public class VideoRecordActivity extends Activity implements PLRecordStateListen
     public static final String ENCODING_SIZE_LEVEL = "EncodingSizeLevel";  // 编码尺寸 1440*1088
     public static final String ENCODING_BITRATE_LEVEL = "EncodingBitrateLevel"; // 编码码率
     public static final String AUDIO_CHANNEL_NUM = "AudioChannelNum";  // 单双声道
-    public static final String DRAFT = "draft";
+    public static final String DRAFT = "draft";  // 是否有草稿可以恢复
 
     private static final boolean USE_TUSDK = true;
 

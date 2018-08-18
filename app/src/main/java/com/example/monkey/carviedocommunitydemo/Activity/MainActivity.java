@@ -85,6 +85,29 @@ public class MainActivity extends Activity {
         }
     }
 
+    public void onClickScreenRecord(View v) {
+        if (isPermissionOK()) {
+            jumpToActivity(ScreenRecordActivity.class);
+        }
+    }
+
+    public void onClickVideoCompose(View v) {
+        if (isPermissionOK()) {
+            jumpToActivity(VideoComposeActivity.class);
+        }
+    }
+
+    private void jumpToActivity(Class<?> cls) {
+        Intent intent = new Intent(MainActivity.this, cls);
+        startActivity(intent);
+    }
+
+    public void onClickTransitionMake(View v) {
+        if (isPermissionOK()) {
+            jumpToActivity(VideoDivideActivity.class);
+        }
+    }
+
     public void jumpToCaptureActivity() {
         Intent intent = new Intent(MainActivity.this, VideoRecordActivity.class);
         intent.putExtra(VideoRecordActivity.PREVIEW_SIZE_RATIO, mPreviewSizeRatioSpinner.getSelectedItemPosition());
@@ -110,4 +133,6 @@ public class MainActivity extends Activity {
     protected String getBuildTimeDescription() {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(BUILD_TIMESTAMP);
     }
+
+
 }

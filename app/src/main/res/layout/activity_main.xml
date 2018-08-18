@@ -17,6 +17,30 @@
             android:onClick="onClickCapture"
             android:text="@string/title_record" />
 
+        <Button
+            android:id="@+id/screen_record_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:onClick="onClickScreenRecord"
+            android:text="@string/title_screen_record" />
+
+        <Button
+            android:id="@+id/video_compose_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:onClick="onClickVideoCompose"
+            android:text="@string/title_compose" />
+
+        <Button
+            android:id="@+id/video_divide_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:onClick="onClickTransitionMake"
+            android:text="@string/title_video_divide" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
