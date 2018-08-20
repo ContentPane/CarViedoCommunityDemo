@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipChildren="false">
 
     <com.example.monkey.carviedocommunitydemo.View.SquareGLSurfaceView
         android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clipChildren="false">
-
-        <com.example.monkey.carviedocommunitydemo.View.FocusIndicator
-            android:id="@+id/focus_indicator"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
-    </FrameLayout>
 
     <LinearLayout
         android:gravity="center"
@@ -231,5 +222,15 @@
             android:src="@drawable/ic_draft" />
 
     </LinearLayout>
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipChildren="false">
+
+        <com.example.monkey.carviedocommunitydemo.View.FocusIndicator
+            android:id="@+id/focus_indicator"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+    </FrameLayout>
 
 </FrameLayout>
