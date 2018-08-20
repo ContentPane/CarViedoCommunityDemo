@@ -31,9 +31,9 @@ public class PaintSelectorPanel extends LinearLayout {
 
     private static int PAINT_MAX_SIZE = 100;
 
-    public static int[] colors = {R.color.paint1, R.color.paint2, R.color.paint3, R.color.paint4,
-            R.color.paint5, R.color.paint6, R.color.paint7, R.color.paint8,
-            R.color.paint9, R.color.paint10};
+    public static int[] colors = {R.color.text1, R.color.text2, R.color.text3, R.color.text4,
+            R.color.text5, R.color.text6, R.color.text7, R.color.text8,
+            R.color.text9, R.color.text10, R.color.text11, R.color.text12};
 
     public PaintSelectorPanel(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);

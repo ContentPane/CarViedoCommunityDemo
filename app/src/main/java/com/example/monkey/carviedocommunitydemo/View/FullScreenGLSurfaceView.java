@@ -4,11 +4,12 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 
-public class SquareGLSurfaceView extends GLSurfaceView {
-    private static final String TAG = "SquareGLSurfaceView";
+public class FullScreenGLSurfaceView extends GLSurfaceView {
+    private static final String TAG = "FullScreenGLSurfaceView";
 
-    public SquareGLSurfaceView(Context context, AttributeSet attrs) {
+    public FullScreenGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -22,6 +23,6 @@ public class SquareGLSurfaceView extends GLSurfaceView {
         Log.i(TAG, "specify width mode:" + MeasureSpec.toString(widthMeasureSpec) + " size:" + width);
         Log.i(TAG, "specify height mode:" + MeasureSpec.toString(heightMeasureSpec) + " size:" + height);
 
-        setMeasuredDimension(width, width);
+        setMeasuredDimension(width, height);
     }
 }

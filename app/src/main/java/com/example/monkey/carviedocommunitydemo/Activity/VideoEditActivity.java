@@ -55,10 +55,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -106,7 +108,7 @@ public class VideoEditActivity extends Activity implements PLVideoSaveListener {
     private long mMixDuration = 5000; // ms
     private boolean mIsMuted = false;
     private boolean mIsMixAudio = false;
-    private boolean mIsUseWatermark = true;
+    private boolean mIsUseWatermark = false;
 
     private String mMp4path;
 
@@ -172,6 +174,8 @@ public class VideoEditActivity extends Activity implements PLVideoSaveListener {
         }
         mPausePalybackButton.setImageResource(R.mipmap.btn_pause);
     }
+
+
 
     /**
      * 停止预览
@@ -281,6 +285,7 @@ public class VideoEditActivity extends Activity implements PLVideoSaveListener {
         mMixDuration = mShortVideoEditor.getDurationMs();
 
         mFrameListView.setVideoPath(mMp4path);
+        // 循环播放本地视频View
         mFrameListView.setOnVideoFrameScrollListener(new FrameListView.OnVideoFrameScrollListener() {
             @Override
             public void onVideoFrameScrollChanged(long timeMs) {

@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +38,10 @@ import com.example.monkey.carviedocommunitydemo.View.MediaController.OnClickSpee
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
 public class PlaybackActivity extends Activity implements
         PLUploadResultListener,
         PLUploadProgressListener {
@@ -45,6 +50,7 @@ public class PlaybackActivity extends Activity implements
     private static final String MP4_PATH = "MP4_PATH";
 
     private PLVideoTextureView mVideoView;
+    private Button mSaveBtn;
     private Button mUploadBtn;
     private PLShortVideoUploader mVideoUploadManager;
     private ProgressBar mProgressBarDeterminate;
@@ -70,6 +76,9 @@ public class PlaybackActivity extends Activity implements
         mVideoUploadManager = new PLShortVideoUploader(getApplicationContext(), uploadSetting);
         mVideoUploadManager.setUploadProgressListener(this);
         mVideoUploadManager.setUploadResultListener(this);
+
+        mSaveBtn = (Button) findViewById(R.id.save_btn);
+        mSaveBtn.setText("save");
 
         mUploadBtn = (Button) findViewById(R.id.upload_btn);
         mUploadBtn.setText(R.string.upload);
@@ -110,6 +119,54 @@ public class PlaybackActivity extends Activity implements
     protected void onDestroy() {
         super.onDestroy();
         mVideoView.stopPlayback();
+    }
+
+    private void saveRecord() {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(checkLastModified());
+            FileOutputStream fileOutputStream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/Video/" + (int)(Math.random()*9000+1000) + "edited.mp4");
+            byte[] buffer = new byte[1024];
+            int byteRead;
+            while (-1 != (byteRead = fileInputStream.read(buffer))) {
+                fileOutputStream.write(buffer, 0, byteRead);
+            }
+            fileInputStream.close();
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onClickSave(View v) {
+        saveRecord();
+    }
+
+    public File checkLastModified() {
+        long fileEditModified = 0;
+        long fileRecordModified = 0;
+        long fileComposedModified = 0;
+        File fileEdited = new File(Environment.getExternalStorageDirectory() + "/ShortVideo/edited.mp4");
+        File fileRecord = new File(Environment.getExternalStorageDirectory() + "/ShortVideo/record.mp4");
+        File fileComposed = new File(Environment.getExternalStorageDirectory() + "/ShortVideo/composed.mp4");
+        if (fileEdited.exists()) {
+            fileEditModified = fileEdited.lastModified();
+        }
+        if (fileRecord.exists()) {
+            fileRecordModified = fileRecord.lastModified();
+        }
+        if (fileComposed.exists()) {
+            fileComposedModified = fileComposed.lastModified();
+        }
+        long max = (fileEditModified > fileRecordModified)? fileEditModified : fileRecordModified;
+        long lastMax = ( max > fileComposedModified)? max : fileComposedModified;
+        if (lastMax == fileEditModified) {
+            return fileEdited;
+        } else if (lastMax == fileRecordModified) {
+            return fileRecord;
+        } else {
+            return fileComposed;
+        }
     }
 
     public class UploadOnClickListener implements View.OnClickListener {
