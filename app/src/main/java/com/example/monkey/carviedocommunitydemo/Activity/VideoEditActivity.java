@@ -70,6 +70,7 @@ public class VideoEditActivity extends Activity implements PLVideoSaveListener {
     private static final String TAG = "VideoEditActivity";
     private static final String MP4_PATH = "MP4_PATH";
 
+    private static final int REQUEST_CODE_PICK_IMAGE_FILE = 2;
     private static final int REQUEST_CODE_PICK_AUDIO_MIX_FILE = 0;
     private static final int REQUEST_CODE_DUB = 1;
 
@@ -199,7 +200,7 @@ public class VideoEditActivity extends Activity implements PLVideoSaveListener {
         mSpeedPanel.setVisibility((mSpeedPanel.getVisibility() == View.GONE) ? View.VISIBLE : View.GONE);
     }
 
-    public void onSpeedClicked(View view) {
+    public void onSpeedClicked(View view) {  // Record速度
         mSpeedTextView.setTextColor(getResources().getColor(R.color.speedTextNormal));
 
         TextView textView = (TextView) view;
@@ -228,17 +229,10 @@ public class VideoEditActivity extends Activity implements PLVideoSaveListener {
         mShortVideoEditor.setSpeed(recordSpeed);
     }
 
-    private void addImageView(String imagePath) {
+    private void addImageView(Bitmap bitmap) {
         checkToAddRectView();
 
         final PLImageView imageView = new PLImageView(VideoEditActivity.this);
-        Bitmap bitmap = null;
-        try {
-            bitmap = BitmapFactory.decodeStream(getAssets().open(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         imageView.setImageBitmap(bitmap);
         mShortVideoEditor.addImageView(imageView);
 
@@ -375,10 +369,31 @@ public class VideoEditActivity extends Activity implements PLVideoSaveListener {
 
     private void initImageSelectorPanel() {
         mImageSelectorPanel = (ImageSelectorPanel) findViewById(R.id.image_selector_panel);
+        mImageSelectorPanel.setOnCustomizeSelectedListener(new ImageSelectorPanel.OnCustomizeSelectedListener() {
+            @Override
+            public void onCustomizeSelected() {
+                Intent intent = new Intent();
+                if (Build.VERSION.SDK_INT < 19) {
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                } else {
+                    intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("image/*");
+                }
+                startActivityForResult(Intent.createChooser(intent, "请选择图片："), REQUEST_CODE_PICK_IMAGE_FILE);
+            }
+        });
         mImageSelectorPanel.setOnImageSelectedListener(new ImageSelectorPanel.OnImageSelectedListener() {
             @Override
             public void onImageSelected(String imagePath) {
-                addImageView(imagePath);
+                Bitmap bitmap = null;
+                try {
+                    bitmap = BitmapFactory.decodeStream(getAssets().open(imagePath));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                addImageView(bitmap);
             }
         });
     }

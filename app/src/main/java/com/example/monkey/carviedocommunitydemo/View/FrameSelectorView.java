@@ -50,20 +50,20 @@ public class FrameSelectorView extends RelativeLayout {
         });
     }
 
-    private class HandlerLeftTouchListener implements OnTouchListener {
+    private class HandlerLeftTouchListener implements OnTouchListener {  // 左边移动Handler
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 if (mIsTouching) {
                     return false;
                 }
-                mOriginX = event.getRawX();
+                mOriginX = event.getRawX();  // 获得触摸的X坐标
                 mOriginWidth = mHandlerBody.getWidth();
                 mOriginParam = mHandlerBody.getLayoutParams();
                 mOriginLeftMargin = mGroupLayoutParam.leftMargin;
                 mIsTouching = true;
             } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                int delta = (int) (event.getRawX() - mOriginX);
+                int delta = (int) (event.getRawX() - mOriginX); // 后面的X减去一开始的X
                 mOriginParam.width = mOriginWidth - delta;
                 mHandlerBody.setLayoutParams(mOriginParam);
                 mGroupLayoutParam.leftMargin = mOriginLeftMargin + delta;
@@ -75,7 +75,7 @@ public class FrameSelectorView extends RelativeLayout {
         }
     }
 
-    private class HandlerRightTouchListener implements OnTouchListener {
+    private class HandlerRightTouchListener implements OnTouchListener {  // 右边移动Handler
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -97,7 +97,7 @@ public class FrameSelectorView extends RelativeLayout {
         }
     }
 
-    private class HandlerBodyTouchListener implements OnTouchListener {
+    private class HandlerBodyTouchListener implements OnTouchListener {  // 内容移动Handler
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {

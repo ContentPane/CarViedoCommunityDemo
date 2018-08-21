@@ -47,14 +47,14 @@ public class ObservableHorizontalScrollView extends HorizontalScrollView {
     protected void onScrollChanged(int x, int y, int oldX, int oldY) {
         super.onScrollChanged(x, y, oldX, oldY);
 
-        if (Math.abs(oldX - x) > 0) {
+        if (Math.abs(oldX - x) > 0) {   // 在原来的位置的时候为0
             if (mScrollingRunnable != null) {
                 removeCallbacks(mScrollingRunnable);
             }
 
             mScrollingRunnable = new Runnable() {
                 public void run() {
-                    if (mIsScrolling && !mIsTouching) {
+                    if (mIsScrolling && !mIsTouching) {  // 如果是正在移动且没有触摸事件 则拉滑事件为false
                         if (mOnScrollListener != null) {
                             mIsDragScroll = false;
                         }
@@ -63,7 +63,7 @@ public class ObservableHorizontalScrollView extends HorizontalScrollView {
                     mScrollingRunnable = null;
                 }
             };
-            postDelayed(mScrollingRunnable, 200);
+            postDelayed(mScrollingRunnable, 200);  //预览影片每0.2s刷新一次
         } else {
             mIsDragScroll = false;
         }

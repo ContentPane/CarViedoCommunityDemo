@@ -57,10 +57,10 @@ public class FrameListView extends FrameLayout {
     public FrameListView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        View view = LayoutInflater.from(context).inflate(R.layout.frame_list_view, this);
-        mFrameList = (RecyclerView) view.findViewById(R.id.recycler_frame_list);
-        mScrollView = (ObservableHorizontalScrollView) view.findViewById(R.id.scroll_view);
-        mScrollViewParent = (FrameLayout) findViewById(R.id.scroll_view_parent);
+        View view = LayoutInflater.from(context).inflate(R.layout.frame_list_view, this);  // 预览帧Layout
+        mFrameList = (RecyclerView) view.findViewById(R.id.recycler_frame_list);           // 预览帧RecyclerView
+        mScrollView = (ObservableHorizontalScrollView) view.findViewById(R.id.scroll_view); // 存储预览帧的HorizontalScrollView
+        mScrollViewParent = (FrameLayout) findViewById(R.id.scroll_view_parent); // 顶层FrameLayout
         mFrameListParent = (ViewGroup) findViewById(R.id.recycler_parent);
     }
 
@@ -77,8 +77,8 @@ public class FrameListView extends FrameLayout {
     public void setVideoPath(String path) {
         mVideoPath = path;
         mMediaFile = new PLMediaFile(mVideoPath);
-        mDurationMs = mMediaFile.getDurationMs();
-        // if the duration time > 10s, the interval time is 3s, else is 1s
+        mDurationMs = mMediaFile.getDurationMs();  // 视频时长
+        // if the duration time > 10s, the interval time is 3s, else is 1s  如果视频秒数大于10s,间隔时间为3s,else则为1s
         mShowFrameIntervalMs = (mDurationMs >= 1000 * 10) ? 3000 : 1000;
 
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
@@ -88,32 +88,32 @@ public class FrameListView extends FrameLayout {
     }
 
     private int getTotalScrollLength() {
-        return getShowFrameCount() * mFrameWidth;
+        return getShowFrameCount() * mFrameWidth; // 每一Frame的宽度*数量
     }
 
-    private int getShowFrameCount() {
+    private int getShowFrameCount() {  // 要展示的Frame的数量
         return (int) Math.ceil((float) mDurationMs / mShowFrameIntervalMs);
     }
 
-    private int getScrollLengthByTime(long time) {
+    private int getScrollLengthByTime(long time) {  // 计算拖滑事件到某一处位置
         return (int) ((float) getTotalScrollLength() * time / mDurationMs);
     }
 
-    public void scrollToTime(long time) {
+    public void scrollToTime(long time) {   // 拖滑事件发生滑动到某一个位置
         int scrollLength = getScrollLengthByTime(time);
         mScrollView.smoothScrollTo(scrollLength, 0);
     }
 
     public FrameSelectorView addSelectorView() {
-        mCurSelectorView = new FrameSelectorView(mContext);
-        final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, mFrameHeight);
-        mCurSelectorView.setVisibility(View.INVISIBLE);
-        mScrollViewParent.addView(mCurSelectorView, layoutParams);
+        mCurSelectorView = new FrameSelectorView(mContext);  // 自定义FrameSelector控件
+        final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, mFrameHeight); // (width,height)
+        mCurSelectorView.setVisibility(View.INVISIBLE);   // 隐藏
+        mScrollViewParent.addView(mCurSelectorView, layoutParams); // 顶层View.addView
 
         mCurSelectorView.post(new Runnable() {
             @Override
             public void run() {
-                // put mCurSelectorView to the middle of the horizontal
+                // put mCurSelectorView to the middle of the horizontal  将CurSelectorView置于顶层View的中间
                 layoutParams.leftMargin = (mScrollViewParent.getWidth() - mCurSelectorView.getWidth()) / 2;
                 mCurSelectorView.setLayoutParams(layoutParams);
                 mCurSelectorView.setVisibility(View.VISIBLE);
@@ -122,7 +122,7 @@ public class FrameListView extends FrameLayout {
         return mCurSelectorView;
     }
 
-    private int getHalfGroupWidth() {
+    private int getHalfGroupWidth() {  // FrameList一半的长度
         return mFrameWidth * 3;
     }
 
@@ -250,9 +250,8 @@ public class FrameListView extends FrameLayout {
     private class FrameListAdapter extends RecyclerView.Adapter<ItemViewHolder> {
 
         @Override
-        public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            Context context = parent.getContext();
-            LayoutInflater inflater = LayoutInflater.from(context);
+        public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
             View contactView = inflater.inflate(R.layout.item_devide_frame, parent, false);
             ItemViewHolder viewHolder = new ItemViewHolder(contactView);
@@ -276,17 +275,17 @@ public class FrameListView extends FrameLayout {
             }
 
             long frameTime = (position - 3) * mShowFrameIntervalMs;
-            new ImageViewTask(holder.mImageView, frameTime, mFrameWidth, mFrameHeight, mMediaFile).execute();
+            new ImageViewTask(holder.mImageView, frameTime, mFrameWidth, mFrameHeight, mMediaFile).execute(); // 异步执行
         }
 
         @Override
         public int getItemCount() {
-            return getShowFrameCount() + 6;
+            return getShowFrameCount() + 6;  //初始化就有6个
         }
     }
 
-    private static class ImageViewTask extends AsyncTask<Void, Void, PLVideoFrame> {
-        private WeakReference<ImageView> mImageViewWeakReference;
+    private static class ImageViewTask extends AsyncTask<Void, Void, PLVideoFrame> {  // AsyncTask　<Params, Progress, Result>
+        private WeakReference<ImageView> mImageViewWeakReference;  // 弱引用
         private long mFrameTime;
         private int mFrameWidth;
         private int mFrameHeight;
@@ -302,7 +301,7 @@ public class FrameListView extends FrameLayout {
 
         @Override
         protected PLVideoFrame doInBackground(Void... v) {
-            PLVideoFrame frame = mMediaFile.getVideoFrameByTime(mFrameTime, false, mFrameWidth, mFrameHeight);
+            PLVideoFrame frame = mMediaFile.getVideoFrameByTime(mFrameTime, false, mFrameWidth, mFrameHeight);  // 获取当前时间的关键帧
             return frame;
         }
 
@@ -314,8 +313,8 @@ public class FrameListView extends FrameLayout {
                 return;
             }
             if (frame != null) {
-                int rotation = frame.getRotation();
-                Bitmap bitmap = frame.toBitmap();
+                int rotation = frame.getRotation();  // 关键帧.getRotation();
+                Bitmap bitmap = frame.toBitmap();  // 关键帧转换为Bitmap置于ImageView
                 mImageView.setImageBitmap(bitmap);
                 mImageView.setRotation(rotation);
             }

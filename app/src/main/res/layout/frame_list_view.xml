@@ -25,6 +25,7 @@
         </RelativeLayout>
     </com.example.monkey.carviedocommunitydemo.View.ObservableHorizontalScrollView>
 
+    <!--预览竖线-->
     <ImageView
         android:id="@+id/middle_line_image"
         android:layout_width="3dp"
